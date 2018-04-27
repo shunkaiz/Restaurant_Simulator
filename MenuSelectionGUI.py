@@ -8,7 +8,6 @@ class MenuSelectionGUI(Frame):
     def __init__(self, root, main, diner, menu):
         super().__init__(root)
         self.grid()
-        print(menu)
         self.main = main
         self.v1 = IntVar(self)
         self.v1.set(1)
@@ -100,7 +99,6 @@ class MenuSelectionGUI(Frame):
         self.diner.addOrder(self.menu[MenuSelectionGUI.MENU_ITEM_TYPES[0]][self.v1.get()-1])
         self.diner.addOrder(self.menu[MenuSelectionGUI.MENU_ITEM_TYPES[1]][self.v2.get()-1])
         self.diner.addOrder(self.menu[MenuSelectionGUI.MENU_ITEM_TYPES[2]][self.v3.get()-1])
-        print(self.v4.get()-1)
         self.diner.addOrder(self.menu[MenuSelectionGUI.MENU_ITEM_TYPES[3]][self.v4.get()-1])
         self.main.grab_release()
         self.main.enableNext()

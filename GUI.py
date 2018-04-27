@@ -6,11 +6,11 @@ from Diner import Diner
 from MenuSelectionGUI import MenuSelectionGUI
 from Waiter import Waiter
 class GUI(Frame):
-    def __init__(self, rootWindow, menuMap, waiter, dinerList):
+    def __init__(self, rootWindow, waiter, dinerList):
         super().__init__(rootWindow)
         self.grid(row = 0)
-        self.menuMap = menuMap
         self.waiter = waiter
+        self.menuMap = waiter.getMenuDic()
         self.dinerList = dinerList
         self.__nextCounter = 0
         self.__labResturantName = Label(self, text='Resturant Name:', font="veranda 16 bold",bg="#44ab3d")
@@ -53,33 +53,37 @@ class GUI(Frame):
         self.__leavingDiners = Label(self, text = '{:20s}'.format(''),font="veranda 12 bold")
         self.__leavingDiners.grid(column = 1, row = 6, ipadx = 100, sticky = 'w')
 
-        # menuList = ['milk', 'beer', 'pork']
-        # self.__ordingDiner = OrderingDinerGUI(self,'James', self.menuMap, self.dinerList[self.__nextCounter])
-        # self.__ordingDiner.grid(row = 7, column = 0, columnspan = 2)
-
-
         self.__nextButton = Button(self, text = 'Next 15 Min', command = self.updateDiner)
-        self.__nextButton.grid(row = 3, column= 0, columnspan = 2, sticky = 'e')
+        self.__nextButton.grid(row = 7, column= 1)
 
         self.__menuButton = Button(self, text= 'make Order', command = self.makeOrder, state = 'disable')
-        self.__menuButton.grid(row = 7, sticky = 'e')
+        self.__menuButton.grid(row = 7, column = 0)
         self.__currOrderDiner = None
+
+        self.__payingBox = Text(self, font= 'veranda 16 bold', height = 8)
+        self.__payingBox.grid(row = 8,column = 0,columnspan = 2, pady = 10)
+
+        self.__leavingBox = Text(self, font= 'veranda 16 bold', height = 8)
+        self.__leavingBox.grid(row = 9, column = 0, columnspan = 2, pady = 10)
+
 
     def updateDiner(self):
         #print(self.dinerList[self.__nextCounter].getName(), str(len(self.dinerList)), str(self.__nextCounter))
         self.__newDiner.config(text='')
+        self.__payingBox.delete('1.0',END)
+        self.__leavingBox.delete('1.0',END)
         if self.__nextCounter < len(self.dinerList):
             if type(self.dinerList[self.__nextCounter])is str:
                 self.__currTime.config(text = '{:20s}'.format(str(self.dinerList[self.__nextCounter])))
             elif type(self.dinerList[self.__nextCounter])is Diner:
                 self.__currTime.config(text='{:20s}'.format(self.dinerList[self.__nextCounter].getTime()))
-                print(self.dinerList[self.__nextCounter].getName())
                 self.__newDiner.config(text='{:20s}'.format(self.dinerList[self.__nextCounter].getName()))
                 self.waiter.addDiner(self.dinerList[self.__nextCounter])
 
             self.__nextCounter += 1
         else:
             self.__newDiner.config(text = 'Restaurant closed')
+
         orderingDiners = []
         eatingDiners = []
         payingDiners = []
@@ -110,7 +114,7 @@ class GUI(Frame):
         textVar = ''
         self.__payingDiners.config(text='')
         for diner in payingDiners:
-            print(diner.getName())
+            #print(diner.getName())
             textVar += diner.getName() + ', '
         self.__payingDiners.config(text = textVar)
 
@@ -124,6 +128,14 @@ class GUI(Frame):
             self.__menuButton.config(state = 'normal')
             self.__nextButton.config(state = 'disable')
             self.__currOrderDiner = orderingDiners[0]
+
+        if len(payingDiners) > 0:
+            message = self.waiter.ringUpDiners()
+            self.__payingBox.insert(END, message + '\n')
+
+        if len(leavingDiners) >0:
+            message = self.waiter.removeDoneDiners()
+            self.__leavingBox.insert(END, message + '\n')
 
         self.waiter.advanceDiners()
 

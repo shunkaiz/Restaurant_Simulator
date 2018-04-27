@@ -20,6 +20,9 @@ class Waiter(object):
     def getNumDiners(self):
         return len(self.__diners)
 
+    def getMenuDic(self):
+        return self.__menu
+
     def printDinerStatuses(self):
         seatedDiner = []
         orderingDiner = []
@@ -74,20 +77,20 @@ class Waiter(object):
         for diner in self.__diners:
             if diner.getStatusIndex() == 3:
                 cost = diner.calculateMealCost()
-                print('You total cost is', end='')
-                print("%.2f" % cost)
+                result = diner.getName()
+                result += ', You total cost is '
+                result += str(format(cost, '.2f'))
+                return result
 
     def removeDoneDiners(self):
         for num in range(len(self.__diners)-1, -1, -1):
             if self.__diners[num].getStatusIndex() == 4:
-                print()
-                print('-------------',self.__diners[num].getName(), 'Thank you!')
+                result = '\n'
+                result += '------------- ' + self.__diners[num].getName() + ', Thank you!'
                 del self.__diners[num]
+                return result
+
 
     def advanceDiners(self):
-        #self.printDinerStatuses()
-        #self.takeOrders()
-        self.ringUpDiners()
-        self.removeDoneDiners()
         for diner in self.__diners:
             diner.updateStatus()

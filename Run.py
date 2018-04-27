@@ -23,7 +23,7 @@ def main():
 
     print("Welcome to " + RESTAURANT_NAME + "!")
     print(RESTAURANT_NAME + " is now open for dinner.\n")
-    #
+
     for i in range(21):
         #print("\n~~~ It is currently", restaurantTime.strftime("%H:%M PM"), "~~~")
         restaurantTime += datetime.timedelta(minutes=15)
@@ -31,7 +31,7 @@ def main():
         #TODO 3: uncomment the following 3 lines once the Diner class is implemented
         potentialDiner = RestaurantHelper.randomDinerGenerator(restaurantTime)
         if potentialDiner is not None:
-            print("\n" + potentialDiner.getName() + " welcome, please be seated!")
+            #print("\n" + potentialDiner.getName() + " welcome, please be seated!")
             # we have a diner to add to the waiter's list of diners
             dinerList.append(potentialDiner)
             #waiter.addDiner(potentialDiner)
@@ -46,7 +46,7 @@ def main():
     root = Tk()
     root.title("Resturant")
     root.geometry("800x600")
-    myAPP = GUI(root, menu, waiter, dinerList)
+    myAPP = GUI(root, waiter, dinerList)
     myAPP.mainloop()
     print('end of gui')
 
