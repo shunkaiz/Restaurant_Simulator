@@ -1,10 +1,15 @@
-# Simple GUI
-# Demonstrates creating a window
+# main GUI for the simulator
+# Name:  Shunkai Zhang
+# ITP 115, Spring 2018
+# Final Project
+# USC email shunkaiz@usc.edu
+
+
+
 from tkinter import *
-import random
 from Diner import Diner
 from MenuSelectionGUI import MenuSelectionGUI
-from Waiter import Waiter
+
 class GUI(Frame):
     def __init__(self, rootWindow, waiter, dinerList):
         super().__init__(rootWindow)
@@ -17,14 +22,12 @@ class GUI(Frame):
         self.__labResturantName.grid(column = 0,row =0, sticky = 'e',padx=50)
 
         self.__resturantName = Label(self, font="veranda 16 bold",fg='red', text= 'Wuxi')
-        #self.__resturantName.insert(0, 'Wuxi Grand Resturant')
         self.__resturantName.grid(row = 0, column = 1, ipadx = 100, sticky = 'w')
 
         self.__labCurrTime = Label(self, text= 'Current Time:', font="veranda 16 bold")
         self.__labCurrTime.grid(column = 0, row =1, padx = 50, sticky = 'e')
 
         self.__currTime = Label(self, text = '{:20s}'.format('') , font="veranda 16 bold")
-        #self.__currTime.insert(0,'sss')
         self.__currTime.grid(row= 1, column = 1, ipadx= 100, sticky = 'w')
 
         self.__labDiner = Label(self, text='Seated Diner(s):',font= 'veranda 16 bold', anchor= 'w')
@@ -68,7 +71,6 @@ class GUI(Frame):
 
 
     def updateDiner(self):
-        #print(self.dinerList[self.__nextCounter].getName(), str(len(self.dinerList)), str(self.__nextCounter))
         self.__newDiner.config(text='')
         self.__payingBox.delete('1.0',END)
         self.__leavingBox.delete('1.0',END)
@@ -99,6 +101,8 @@ class GUI(Frame):
                 payingDiners.append(diner)
             elif currStatus == 4:
                 leavingDiners.append(diner)
+
+        # update labels for each type of diner
         textVar = ''
         self.__orderingDiners.config(text='')
         for diner in orderingDiners:
@@ -114,7 +118,6 @@ class GUI(Frame):
         textVar = ''
         self.__payingDiners.config(text='')
         for diner in payingDiners:
-            #print(diner.getName())
             textVar += diner.getName() + ', '
         self.__payingDiners.config(text = textVar)
 
@@ -124,11 +127,15 @@ class GUI(Frame):
             textVar += diner.getName() + ', '
         self.__leavingDiners.config(text = textVar)
 
+
+        # disable next button when making order
+        # open new window for menu selection
         if len(orderingDiners) > 0:
-            self.__menuButton.config(state = 'normal')
-            self.__nextButton.config(state = 'disable')
+            self.enableMenu()
+            self.disableNext()
             self.__currOrderDiner = orderingDiners[0]
 
+        # update box text messages for paying and leaving diners
         if len(payingDiners) > 0:
             message = self.waiter.ringUpDiners()
             self.__payingBox.insert(END, message + '\n')
@@ -139,13 +146,17 @@ class GUI(Frame):
 
         self.waiter.advanceDiners()
 
+
+    # create a new MenuSelection GUI window
     def makeOrder(self):
         self.disableNext()
-        self.grab_set()
+        self.disableMenu()
         root = Tk()
         self.__menuOrder  = MenuSelectionGUI(root, self, self.__currOrderDiner, self.menuMap)
         self.__menuOrder.grid(row=8, column=0, columnspan=2)
         root.mainloop()
+        root.destroy()
+
 
     def disableNext(self):
         self.__nextButton.config(state = 'disable')
@@ -155,3 +166,6 @@ class GUI(Frame):
 
     def disableMenu(self):
         self.__menuButton.config(state='disable')
+
+    def enableMenu(self):
+        self.__menuButton.config(state= 'normal')

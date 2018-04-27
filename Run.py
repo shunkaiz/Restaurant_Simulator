@@ -1,9 +1,16 @@
 """
-ITP 115, SP17 Final project
+ITP 115, SP18 Final project
 Run this file in order to start the restaurant simulation program
 """
+
+# Name:  Shunkai Zhang
+# ITP 115, Spring 2018
+# Final Project
+# USC email shunkaiz@usc.edu
+
 import datetime
 from tkinter import *
+
 #from GUI import GUI
 # TODO 0: uncomment the following 3 import statements when you create these files
 from Menu import Menu
@@ -25,40 +32,20 @@ def main():
     print(RESTAURANT_NAME + " is now open for dinner.\n")
 
     for i in range(21):
-        #print("\n~~~ It is currently", restaurantTime.strftime("%H:%M PM"), "~~~")
         restaurantTime += datetime.timedelta(minutes=15)
-
-        #TODO 3: uncomment the following 3 lines once the Diner class is implemented
         potentialDiner = RestaurantHelper.randomDinerGenerator(restaurantTime)
         if potentialDiner is not None:
-            #print("\n" + potentialDiner.getName() + " welcome, please be seated!")
-            # we have a diner to add to the waiter's list of diners
             dinerList.append(potentialDiner)
-            #waiter.addDiner(potentialDiner)
         else:
             dinerList.append(str(restaurantTime))
-        # TODO 4: uncomment the following 2 lines once the Waiter class is implemented
 
-
-        #waiter.advanceDiners()
-        #print('number of diners is ', str(waiter.getNumDiners()))
-
+    # create main GUI
     root = Tk()
     root.title("Resturant")
     root.geometry("800x600")
     myAPP = GUI(root, waiter, dinerList)
     myAPP.mainloop()
     print('end of gui')
-
-    print("\n~~~ ", RESTAURANT_NAME, "is now closed. ~~~")
-    # After the restaurant is closed, progress any diners until everyone has left
-    # TODO 5: uncomment the following 5 lines once the Waiter class is implemented
-    while waiter.getNumDiners() != 0:
-        print("\n~~~ It is currently", restaurantTime.strftime("%H:%M PM"), "~~~")
-        #print('number of diners is ', str(waiter.getNumDiners()))
-        restaurantTime += datetime.timedelta(minutes=15)
-        waiter.advanceDiners()
-
     print("Goodbye!")
 
 main()
