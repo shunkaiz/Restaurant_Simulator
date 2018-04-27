@@ -86,7 +86,7 @@ class Waiter(object):
 
     def advanceDiners(self):
         #self.printDinerStatuses()
-        self.takeOrders()
+        #self.takeOrders()
         self.ringUpDiners()
         self.removeDoneDiners()
         for diner in self.__diners:

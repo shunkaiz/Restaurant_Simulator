@@ -122,6 +122,7 @@ class GUI(Frame):
 
         if len(orderingDiners) > 0:
             self.__menuButton.config(state = 'normal')
+            self.__nextButton.config(state = 'disable')
             self.__currOrderDiner = orderingDiners[0]
 
         self.waiter.advanceDiners()
